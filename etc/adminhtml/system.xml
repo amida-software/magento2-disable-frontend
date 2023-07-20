@@ -1,12 +1,25 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="admin">
-            <group id="disable_frontend" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
+        <section id="admin" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="disable_frontend" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Disable Frontend</label>
-                <field id="show_as_frontend" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="show_as_frontend" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show frontend as</label>
                     <source_model>Abelbm\DisableFrontend\Model\Config\Source\Custom</source_model>
+                </field>
+                <field id="allowed_actions" translate="label comment" sortOrder="2" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enter the Allowed Actions : </label>
+                    <comment> Separator "," (Ex: cms_page_view,cms_page_index) </comment>
+                </field>
+                <field id="url_for_redirect" translate="label comment" sortOrder="1" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enter the Full Url For Redirect </label>
+                    <comment>
+                        start from http://: (Ex:http://google.com)
+                    </comment>
+                    <depends>
+                        <field id="show_as_frontend">2</field>
+                    </depends>
                 </field>
             </group>
         </section>
