@@ -27,12 +27,11 @@ class DisableFrontend implements ObserverInterface
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        ActionFlag           $actionFlag,
-        RedirectInterface    $redirect,
-        Data                 $helperBackend,
+        ActionFlag $actionFlag,
+        RedirectInterface $redirect,
+        Data $helperBackend,
         ScopeConfigInterface $scopeConfig
-    )
-    {
+    ) {
         $this->_actionFlag = $actionFlag;
         $this->redirect = $redirect;
         $this->helperBackend = $helperBackend;
@@ -50,7 +49,8 @@ class DisableFrontend implements ObserverInterface
             return;
         }
         $controller = $observer->getControllerAction();
-        $configValue = $this->scopeConfig->getValue('admin/disable_frontend/show_as_frontend', ScopeInterface::SCOPE_STORES);
+        $configValue = $this->scopeConfig->getValue('admin/disable_frontend/show_as_frontend',
+            ScopeInterface::SCOPE_STORES);
         if ($configValue == 1) {
             $controller = $observer->getControllerAction();
             $this->_actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
@@ -58,17 +58,20 @@ class DisableFrontend implements ObserverInterface
         }
 
         if ($configValue == 2) {
-            $allowedActrions = $this->scopeConfig->getValue('admin/disable_frontend/allowed_actions', ScopeInterface::SCOPE_STORES);
+            $allowedActrions = $this->scopeConfig->getValue('admin/disable_frontend/allowed_actions',
+                ScopeInterface::SCOPE_STORES);
             $allowedActrions = explode(',', $allowedActrions);
             foreach ($allowedActrions as $action) {
-                if ($request->getFullActionName() != $action) {
+                if ($request->getFullActionName() != trim($action)) {
                     continue;
                 }
-                $redirectUrl = $this->scopeConfig->getValue('admin/disable_frontend/url_for_redirect', ScopeInterface::SCOPE_STORES);
-                if ($redirectUrl) {
-                    $this->redirect->redirect($controller->getResponse(), $redirectUrl);
-                }
+
                 return;
+            }
+            $redirectUrl = $this->scopeConfig->getValue('admin/disable_frontend/url_for_redirect',
+                ScopeInterface::SCOPE_STORES);
+            if ($redirectUrl) {
+                $this->redirect->redirect($controller->getResponse(), $redirectUrl);
             }
         }
     }
